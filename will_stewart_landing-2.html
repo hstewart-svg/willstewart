@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Will Stewart</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --bg:        #0A0F1E;
+  --surface:   #0F1628;
+  --card:      #141C35;
+  --border:    #1E2D52;
+  --blue:      #60A5FA;
+  --blue-lt:   #93C5FD;
+  --blue-dk:   #2563EB;
+  --blue-dim:  #1E3A6E;
+  --blue-glow: rgba(96,165,250,.15);
+  --green:     #2E8B57;
+  --green-lt:  #3DAA6C;
+  --text:      #E8EDF8;
+  --mid:       #6B7A9E;
+  --dim:       #2D3A5C;
+  --white:     #FFFFFF;
+  --font-head: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.65;
+  overflow-x: hidden;
+}
+
+/* ── NOISE TEXTURE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1000;
+  opacity: .4;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 900;
+  padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(to bottom, rgba(13,15,14,.95) 60%, transparent);
+}
+.nav-logo {
+  font-family: var(--font-head);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--text);
+  text-decoration: none;
+}
+.nav-logo span { color: var(--blue-lt); }
+.nav-links { display: flex; gap: 28px; }
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--mid);
+  text-decoration: none;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  transition: color .2s;
+}
+.nav-links a:hover { color: var(--blue-lt); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 40px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 70% 40%, rgba(96,165,250,.10) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 60% at 20% 80%, rgba(96,165,250,.05) 0%, transparent 60%);
+}
+
+/* Animated grid lines */
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(96,165,250,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(96,165,250,.04) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--blue-lt);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.hero-eyebrow::before {
+  content: '';
+  display: block;
+  width: 32px;
+  height: 1px;
+  background: var(--blue);
+}
+
+.hero h1 {
+  font-family: var(--font-head);
+  font-size: clamp(72px, 12vw, 148px);
+  line-height: .92;
+  letter-spacing: -2px;
+  font-weight: 700;
+  color: var(--white);
+  position: relative;
+  margin-bottom: 8px;
+}
+.hero h1 .line2 { color: var(--blue-lt); }
+
+.hero-sub {
+  font-family: var(--font-body);
+  font-size: clamp(15px, 1.9vw, 19px);
+  color: var(--mid);
+  font-weight: 300;
+  margin-top: 20px;
+  max-width: 520px;
+  position: relative;
+  line-height: 1.65;
+}
+
+.hero-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 32px;
+  position: relative;
+}
+.hero-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: var(--mid);
+  transition: all .2s;
+}
+.hero-tag:hover { border-color: var(--blue); color: var(--blue-lt); }
+.hero-tag.highlight { border-color: var(--blue-dim); color: var(--blue-lt); background: var(--blue-glow); }
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 30px;
+  right: 40px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--dim);
+  letter-spacing: 1px;
+  writing-mode: vertical-rl;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.scroll-indicator::after {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--dim), transparent);
+}
+
+/* ── SECTIONS ── */
+section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 100px 40px;
+}
+
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--blue-lt);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-label::before { content: '//'; color: var(--dim); }
+
+.section-title {
+  font-family: var(--font-head);
+  font-size: clamp(36px, 5vw, 60px);
+  line-height: 1.05;
+  letter-spacing: -1px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 48px;
+}
+
+/* ── ABOUT ── */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 80px;
+  align-items: start;
+}
+
+.about-text p {
+  font-size: clamp(15px, 1.6vw, 18px);
+  color: var(--text);
+  margin-bottom: 20px;
+  line-height: 1.75;
+  font-weight: 300;
+}
+.about-text p:first-child { font-size: clamp(16px, 1.8vw, 20px); color: rgba(240,242,240,.9); font-weight: 400; }
+
+.about-text strong { color: var(--blue-lt); font-weight: 600; }
+
+.about-sidebar { position: sticky; top: 100px; }
+
+.stat-block {
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--blue);
+  background: var(--card);
+  padding: 18px 20px;
+  margin-bottom: 10px;
+  border-radius: 0 4px 4px 0;
+  transition: border-color .2s, background .2s;
+}
+.stat-block:hover { border-left-color: var(--blue-lt); background: var(--surface); }
+.stat-label { font-family: var(--font-mono); font-size: 9px; color: var(--mid); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+.stat-value { font-family: var(--font-head); font-size: 22px; font-weight: 700; letter-spacing: -0.5px; color: var(--white); line-height: 1.1; }
+.stat-detail { font-size: 12px; color: var(--mid); margin-top: 4px; font-family: var(--font-body); }
+
+/* ── MILESTONES ── */
+.milestones { border-top: 1px solid var(--border); }
+
+.milestone-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+.milestone-card {
+  background: var(--card);
+  padding: 32px 28px;
+  transition: background .2s;
+  position: relative;
+  overflow: hidden;
+}
+.milestone-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--blue);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .3s;
+}
+.milestone-card:hover { background: var(--surface); }
+.milestone-card:hover::before { transform: scaleX(1); }
+
+.milestone-date {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--blue-lt);
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+.milestone-title {
+  font-family: var(--font-head);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: var(--white);
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+.milestone-org {
+  font-size: 12px;
+  color: var(--mid);
+  font-family: var(--font-mono);
+  letter-spacing: .5px;
+  margin-bottom: 12px;
+}
+.milestone-desc {
+  font-size: 14px;
+  color: var(--mid);
+  line-height: 1.65;
+  font-weight: 300;
+}
+
+/* ── CREDENTIALS ── */
+.cred-section { background: var(--surface); margin: 0; max-width: 100%; padding: 80px 0; }
+.cred-inner { max-width: 1100px; margin: 0 auto; padding: 0 40px; }
+
+.cred-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+
+.cred-card {
+  border: 1px solid var(--border);
+  background: var(--card);
+  padding: 28px 24px;
+  border-radius: 4px;
+  transition: border-color .2s, transform .2s;
+}
+.cred-card:hover { border-color: var(--blue-dim); transform: translateY(-2px); }
+.cred-icon { font-size: 26px; margin-bottom: 14px; display: block; }
+.cred-title { font-family: var(--font-head); font-size: 16px; font-weight: 600; letter-spacing: -.2px; color: var(--white); margin-bottom: 10px; }
+.cred-body { font-size: 13.5px; color: var(--mid); line-height: 1.68; font-weight: 300; }
+.cred-body strong { color: var(--text); font-weight: 600; }
+
+/* ── CONTACT ── */
+.contact-section {
+  text-align: center;
+  padding: 120px 40px;
+  position: relative;
+  overflow: hidden;
+}
+.contact-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(96,165,250,.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.contact-intro {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--blue-lt);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.contact-heading {
+  font-family: var(--font-head);
+  font-size: clamp(44px, 7vw, 84px);
+  letter-spacing: -2px;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1;
+  margin-bottom: 24px;
+}
+
+.contact-sub {
+  font-size: 17px;
+  color: var(--mid);
+  font-weight: 300;
+  max-width: 500px;
+  margin: 0 auto 48px;
+  line-height: 1.65;
+}
+
+.contact-links {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.contact-btn {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 14px 28px;
+  text-decoration: none;
+  transition: all .2s;
+  border-radius: 2px;
+}
+.contact-btn.primary {
+  background: var(--blue-dk);
+  color: #fff;
+  border: 1px solid var(--blue-dk);
+}
+.contact-btn.primary:hover { background: var(--blue); border-color: var(--blue); }
+.contact-btn.secondary {
+  background: transparent;
+  color: var(--mid);
+  border: 1px solid var(--border);
+}
+.contact-btn.secondary:hover { border-color: var(--blue-dim); color: var(--blue-lt); }
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 28px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--dim);
+  letter-spacing: 1px;
+}
+
+/* ── DIVIDER ── */
+.section-divider { height: 1px; background: var(--border); max-width: 1100px; margin: 0 auto; }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hero-eyebrow { animation: fadeUp .6s ease both; }
+.hero h1      { animation: fadeUp .7s .1s ease both; }
+.hero-sub     { animation: fadeUp .7s .2s ease both; }
+.hero-tags    { animation: fadeUp .7s .3s ease both; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  nav { padding: 16px 20px; }
+  .nav-links { display: none; }
+  .hero { padding: 0 20px 60px; }
+  section { padding: 70px 20px; }
+  .about-grid { grid-template-columns: 1fr; gap: 40px; }
+  .about-sidebar { position: static; }
+  .cred-grid { grid-template-columns: 1fr; }
+  .contact-section { padding: 80px 20px; }
+  footer { padding: 20px; flex-direction: column; gap: 8px; text-align: center; }
+  .cred-inner { padding: 0 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">W<span>S</span></a>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#milestones">Milestones</a>
+    <a href="#credentials">Background</a>
+    <a href="#contact">Connect</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+
+  <div class="hero-eyebrow">Bedford, NH → Toronto, ON · Class of 2030</div>
+
+  <h1>
+    WILL<br>
+    <span class="line2">STEWART</span>
+  </h1>
+
+  <p class="hero-sub">
+    Economics student at the University of Toronto &amp; member of the Varsity Blues Men's Rugby team. Entrepreneur. Eagle Scout.
+  </p>
+
+  <div class="hero-tags">
+    <span class="hero-tag highlight">Venture Capital</span>
+    <span class="hero-tag highlight">Investment Banking</span>
+    <span class="hero-tag highlight">Entrepreneurship</span>
+    <span class="hero-tag">U of T · St. Michael's College</span>
+    <span class="hero-tag">Varsity Blues Rugby</span>
+    <span class="hero-tag">Eagle Scout</span>
+    <span class="hero-tag">Bedford, NH → Toronto</span>
+  </div>
+
+  <div class="scroll-indicator">scroll</div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">About</div>
+  <div class="section-title">THE PROFILE</div>
+
+  <div class="about-grid">
+    <div class="about-text">
+      <p>Economics student at the University of Toronto (St. Michael's College) and member of the Varsity Blues Men's Rugby team.</p>
+      <p>Driven by an adventuresome spirit and a high-stakes competitive mindset, I am an entrepreneur who thrives in environments where <strong>strategy meets execution</strong>. Whether leading a crew on a High Adventure trek or pitching a venture thesis to a panel of judges, my focus is on strategic persuasion and resilient leadership.</p>
+      <p>I am pursuing a career at the intersection of <strong>Finance and Venture Capital</strong> — where interpersonal skills meet rigorous analytical thinking.</p>
+      <p>I believe that <em>"nothing worth anything is meant to be easy"</em> — a philosophy tested through the BSA High Adventure Triple Crown: an 85-mile Philmont trek, Florida Sea Base, and a 50-mile St. Croix River canoe expedition.</p>
+    </div>
+
+    <div class="about-sidebar">
+      <div class="stat-block">
+        <div class="stat-label">University</div>
+        <div class="stat-value">U of T</div>
+        <div class="stat-detail">St. Michael's College · Economics</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-label">Athletics</div>
+        <div class="stat-value">VARSITY BLUES</div>
+        <div class="stat-detail">Men's Rugby · Wing</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-label">Dartmouth Bootcamp</div>
+        <div class="stat-value">#2 OVERALL</div>
+        <div class="stat-detail">Circular Economy Venture Pitch · July 2024</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-label">NH DECA State Championship</div>
+        <div class="stat-value">TOP 3</div>
+        <div class="stat-detail">Entrepreneurship Track · Feb 2026</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-label">Leadership</div>
+        <div class="stat-value">EAGLE SCOUT</div>
+        <div class="stat-detail">OA Brotherhood Rank · Troop 1 (CA) → Troop 1776 (NH)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- MILESTONES -->
+<section id="milestones">
+  <div class="section-label">Experience</div>
+  <div class="section-title">KEY MILESTONES</div>
+
+  <div class="milestone-grid">
+    <div class="milestone-card">
+      <div class="milestone-date">FEB 2026 — PRESENT</div>
+      <div class="milestone-title">ORDAINED YOUTH ELDER</div>
+      <div class="milestone-org">Bedford Presbyterian Church, Bedford NH</div>
+      <div class="milestone-desc">Elected as the sole youth representative to the Session (Board of Directors). Serves alongside adult leadership on institutional decisions for the congregation.</div>
+    </div>
+    <div class="milestone-card">
+      <div class="milestone-date">FEB 2026</div>
+      <div class="milestone-title">TOP 3 STATE — ENTREPRENEURSHIP</div>
+      <div class="milestone-org">NH DECA State Championship</div>
+      <div class="milestone-desc">Ranked Top 3 in the State for Entrepreneurship and Top 5 Overall. Developed and defended comprehensive business models in Shark Tank-style simulations judged by industry executives.</div>
+    </div>
+    <div class="milestone-card">
+      <div class="milestone-date">JULY 2024</div>
+      <div class="milestone-title">#2 VENTURE PITCH</div>
+      <div class="milestone-org">Dartmouth College Entrepreneurship Bootcamp</div>
+      <div class="milestone-desc">Developed a dual-revenue circular economy model — service contracts for invasive mussel removal plus sale of high-purity calcium carbonate byproduct to industrial and pharmaceutical markets. Placed #2 overall before a panel of VCs and mentors.</div>
+    </div>
+    <div class="milestone-card">
+      <div class="milestone-date">LIFELONG</div>
+      <div class="milestone-title">EAGLE SCOUT</div>
+      <div class="milestone-org">Scouting America · Troop 1 (Mill Valley, CA) → Troop 1776 (Manchester, NH)</div>
+      <div class="milestone-desc">Highest rank in Scouting America through 23 merit badges and demonstrated leadership. Peer-elected to the Order of the Arrow Brotherhood Rank. High Adventure Triple Crown: Philmont (85mi), Florida Sea Base, St. Croix River (50mi).</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- CREDENTIALS -->
+<div class="cred-section" id="credentials">
+  <div class="cred-inner">
+    <div class="section-label">Background</div>
+    <div class="section-title">CREDENTIALS</div>
+
+    <div class="cred-grid">
+      <div class="cred-card">
+        <span class="cred-icon">🎓</span>
+        <div class="cred-title">ACADEMIC</div>
+        <div class="cred-body">Entering U of T with a rigorous foundation in <strong>IB and AP coursework</strong>. Economics program at St. Michael's College — focused on the macro-drivers of Venture and M&amp;A markets.</div>
+      </div>
+      <div class="cred-card">
+        <span class="cred-icon">🏉</span>
+        <div class="cred-title">ATHLETICS</div>
+        <div class="cred-body">Committed to the <strong>Varsity Blues Men's Rugby team</strong> as a Wing. Brings the stamina and high-pressure performance mindset of collegiate-level sport to every professional endeavor.</div>
+      </div>
+      <div class="cred-card">
+        <span class="cred-icon">🌍</span>
+        <div class="cred-title">GLOBAL PERSPECTIVE</div>
+        <div class="cred-body">Travelled to <strong>15+ countries</strong>. Proficient in <strong>French</strong>, basic Spanish and Italian. Brings cross-cultural communication and adaptability to international finance and VC contexts.</div>
+      </div>
+      <div class="cred-card">
+        <span class="cred-icon">⚡</span>
+        <div class="cred-title">ENTREPRENEURSHIP</div>
+        <div class="cred-body"><strong>#2 at Dartmouth</strong> for a circular economy venture pitch. <strong>Top 3 NH State</strong> in DECA Entrepreneurship. Proven in Shark Tank-style environments requiring market analysis and persuasive pitching.</div>
+      </div>
+      <div class="cred-card">
+        <span class="cred-icon">🦅</span>
+        <div class="cred-title">SCOUTING</div>
+        <div class="cred-body"><strong>Eagle Scout</strong> and <strong>OA Brotherhood Rank</strong> — peer-elected. Started with Troop 1 in Mill Valley, CA; completed Eagle with Troop 1776 in Manchester, NH. High Adventure Triple Crown: Philmont, Sea Base, St. Croix River.</div>
+      </div>
+      <div class="cred-card">
+        <span class="cred-icon">⛪</span>
+        <div class="cred-title">LEADERSHIP</div>
+        <div class="cred-body">Ordained <strong>Youth Elder</strong> at Bedford Presbyterian Church — appointed to serve on the governing board alongside adult leadership. Early exposure to institutional decision-making.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<section id="contact" class="contact-section">
+  <div class="contact-intro">Connect</div>
+  <div class="contact-heading">LET'S TALK</div>
+  <p class="contact-sub">In Toronto from September 1. Happy to connect with anyone working in VC, finance, or corporate development.</p>
+  <div class="contact-links">
+    <a class="contact-btn primary" href="mailto:willstewart7@icloud.com">willstewart7@icloud.com</a>
+    <a class="contact-btn primary" href="mailto:will.stewart@mail.utoronto.ca">will.stewart@mail.utoronto.ca</a>
+    <a class="contact-btn secondary" href="https://linkedin.com/in/willstewart" target="_blank">LinkedIn</a>
+    <a class="contact-btn secondary" href="tel:+16037992894">+1 603-799-2894</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>WILL STEWART · TORONTO · CLASS OF 2030</span>
+  <span>ECONOMICS @ U OF T · VARSITY BLUES RUGBY · EAGLE SCOUT</span>
+</footer>
+
+</body>
+</html>
